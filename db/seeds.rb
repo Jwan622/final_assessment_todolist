@@ -8,10 +8,13 @@
 
 unarchived_list1 = List.create(title: "Unarchived List1", status:"unarchived")
 unarchived_list2 = List.create(title: "Unarchived List2", status:"unarchived")
+archived_list1 = List.create(title: "Archived List1", status: "archived")
 
 unarchived_list1.tasks << Task.create(title: "Some Task0", due_date: Date.new(2015,6,22), description: "Finish this assessment.")
 unarchived_list1.tasks << Task.create(title: "Some Task1", due_date: Date.new(2015,6,23), description: "Prank Steve.")
 unarchived_list1.tasks << Task.create(title: "Some Task2", due_date: Date.new(2015,6,24), description: "Celebrate newfound freedom.")
 unarchived_list1.tasks << Task.create(title: "Some Task3", due_date: Date.new(2015,7,22), description: "Live life.")
+
+archived_list1.tasks << Task.create(title: "Some Task 4", due_date: Date.new(2015, 8, 22), description: "Turing is done!")
 
 unarchived_list2.tasks << Task.create(title: "Some Task4", due_date: Date.new(2015,6,25), description: "Prank Steve continuously.")

@@ -5,7 +5,7 @@ class ManageListsTest < ActionDispatch::IntegrationTest
     create_list(:list, 2)
     visit root_url
 
-    page.assert_selector(".list", count: 2)
+    page.assert_selector(".lists", count: 1)
     assert page.has_content?("Your Todo Lists")
   end
 
@@ -16,6 +16,6 @@ class ManageListsTest < ActionDispatch::IntegrationTest
     visit root_url
 
     page.assert_selector("li", count: 3)
-    assert page.has_unchecked_field?("#checkbox-item", count: 3)
+    assert page.has_selector?(".checkbox-task", count: 3)
   end
 end
