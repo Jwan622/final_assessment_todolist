@@ -59,6 +59,24 @@
                 </div>
               <% end %>
             <% end %>
+
+            <div class="filter-section">
+              <label for="search_table"><strong>Each List is Searchable by Keyword in Title or Description</strong></label><br>
+              <input type="text" id="search_table" placeholder="keywords">
+            </div>
+
+            <div class="taggings-section">
+              <% if list.tasks %>
+                <% list.tasks.each do |task| %>
+                  <% if task.tags %>
+                    <% task.tags.each do |tag| %>
+                      <p><u class="mark"><%= tag.tag_name %></u></p>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+
         </div>
       <% end %>
     </div>
@@ -68,6 +86,7 @@
       <%= link_to "View Archived Lists", lists_path(see_archive: true), class: "btn btn-info btn-lg" %>
       <%= link_to "View Unarchived Lists", lists_path(see_unarchive: true), class: "btn btn-info btn-lg" %>
     </div>
+
 </div>
 
 
@@ -78,9 +97,36 @@
     //   $(".lists").html("")
     // }
 
+    function searchByColumns(self, searchVal) {
+      var searchVal = searchVal.toLowerCase()
+      var list = self.closest(".list")
+      list.find("div[class='task']").each(function(index, task){
+        var allTextPerList = $(task).text()
+        if (allTextPerList.length > 0) {
+          var found = false;
+          var searchWords = []
+          $(task).find("label").each(function(index, label) {
+            searchWords.push($(label).text())
+          })
+          var regExp = new RegExp(searchVal, "i");
+          searchWords.forEach(function(term, index) {
+            if(regExp.test(term.toLowerCase())) {
+              found = true;
+              return false;
+            }
+          });
+          if(found === true) {
+            $(task).show();
+          }
+          else {
+            $(task).hide();
+          }
+        }
+      });
+    };
+
     function redrawListsAndTasks(response) {
       // clearCurrentLists()
-      debugger;
       $(".lists").append(response)
     }
 
@@ -98,6 +144,12 @@
       else {
         $("button").html("See Completed Tasks")
       }
+    });
+
+    $('#search_table').keyup(function() {
+      var searchLetter = ($(this).val().toLowerCase())
+      var self = $(this)
+      searchByColumns(self, searchLetter);
     });
 
 
