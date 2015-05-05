@@ -70,7 +70,7 @@
 
             <div class="filter-section">
               <label for="search_table"><strong>Each List is Searchable by Keyword in Title or Description</strong></label><br>
-              <input type="text" id="search_table" placeholder="keywords">
+              <input type="text" class="search_table" placeholder="keywords">
             </div>
 
             <div class="taggings-section">
@@ -163,7 +163,7 @@
       }
     });
 
-    $('#search_table').keyup(function() {
+    $('.search_table').keyup(function() {
       var searchLetter = ($(this).val().toLowerCase())
       var self = $(this)
       searchByColumns(self, searchLetter);
