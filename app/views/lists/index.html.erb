@@ -15,6 +15,7 @@
           </p
 
         <h5><u>Check a box to mark a task complete.</u></h3>
+          <%= link_to "Create New Task", new_task_path, class: "btn btn-success" %>
         <% list.tasks.each do |task| %>
           <div class="task">
             <ul>
