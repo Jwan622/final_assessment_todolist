@@ -1,9 +1,15 @@
 class ListsController < ApplicationController
+
   def index
     if params[:see_archive] == "true"
       @lists = List.includes(:tasks).where(status: "archived")
     else
       @lists = List.includes(:tasks).where(status: "unarchived")
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @lists.to_json }
     end
   end
 

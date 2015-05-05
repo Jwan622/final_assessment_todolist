@@ -14,9 +14,11 @@ unarchived_list1.tasks << Task.create(title: "Some Task0", due_date: Date.new(20
 unarchived_list1.tasks << Task.create(title: "Some Task1", due_date: Date.new(2015,6,23), description: "Prank Steve.")
 unarchived_list1.tasks << Task.create(title: "Some Task2", due_date: Date.new(2015,6,24), description: "Celebrate newfound freedom.")
 unarchived_list1.tasks << Task.create(title: "Some Task3", due_date: Date.new(2015,7,22), description: "Live life.")
-unarchived_list1.tasks << Task.create(title: "Some Task4", due_date: Date.new(2015,7,22), status: "complete", description: "Live life.")
-unarchived_list1.tasks << Task.create(title: "Some Task5", due_date: Date.new(2015,7,22), status: "complete", description: "Live life.")
+unarchived_list1.tasks << Task.create(title: "Some Task4", due_date: Date.new(2015,7,22), description: "Live lifes.")
+unarchived_list1.tasks << Task.create(title: "Some Task5", due_date: Date.new(2015,7,22), description: "Live lifez.")
+unarchived_list1.tasks << Task.create(title: "Some Task6", due_date: Date.new(2015,7,22), status: "complete", description: "Live life.")
+unarchived_list1.tasks << Task.create(title: "Some Task7", due_date: Date.new(2015,7,22), status: "complete", description: "Live life.")
 
-archived_list1.tasks << Task.create(title: "Some Task 4", due_date: Date.new(2015, 8, 22), description: "Turing is done!")
+archived_list1.tasks << Task.create(title: "Some Task 8", due_date: Date.new(2015, 8, 22), description: "Turing is done!")
 
-unarchived_list2.tasks << Task.create(title: "Some Task4", due_date: Date.new(2015,6,25), description: "Prank Steve continuously.")
+unarchived_list2.tasks << Task.create(title: "Some Task9", due_date: Date.new(2015,6,25), description: "Prank Steve continuously.")
