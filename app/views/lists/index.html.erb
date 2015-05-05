@@ -25,10 +25,14 @@
                   <ul>
                     <li>
                       <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
-                      <%= label_tag task.title %>
+                      <span class="task-info">
+                        <%= label_tag task.title %>
+                      </span>
                       <br>
                       <%= label_tag "Description" %>
-                      <%= task.description %>
+                      <span class="task-info">
+                        <%= task.description %>
+                      </span>
                       <br>
                       <%= label_tag "Due Date" %>
                       <%= task.due_date %>
@@ -45,10 +49,14 @@
                   <ul>
                     <li>
                       <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
-                      <%= label_tag task.title %>
+                      <span class="task-info">
+                        <%= label_tag task.title %>
+                      </span>
                       <br>
                       <%= label_tag "Description" %>
-                      <%= task.description %>
+                      <span class="task-info">
+                        <%= task.description %>
+                      </span>
                       <br>
                       <%= label_tag "Due Date" %>
                       <%= task.due_date %>
@@ -110,20 +118,20 @@
         if (allTextPerList.length > 0) {
           var found = false;
           var searchWords = []
-          $(task).find("label").each(function(index, label) {
-            searchWords.push($(label).text())
-            //push all of the text into searchWords
+          // searchWords will eventually have title and description of the task.
+
+          $(task).find(".task-info").each(function(index, element) {
+            searchWords.push(element.textContent.trim())
           })
 
           var regExp = new RegExp(searchVal, "i");
-          // good old regex match, ugh
-          searchWords.forEach(function(term, index) {
-            if(regExp.test(term.toLowerCase())) {
-              // if regex matches, found = true
-              found = true;
-              return false;
-            }
-          });
+          // good old regex match, FML Steve
+
+          var searchRegMatch = searchWords.join()
+          if(regExp.test(searchRegMatch.toLowerCase())) {
+            found = true;
+          }
+
           if(found === true) {
             $(task).show();
           }
