@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150505150415) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "lists", force: :cascade do |t|
     t.string   "title"
     t.string   "status",     default: "unarchived"
@@ -30,6 +33,7 @@ ActiveRecord::Schema.define(version: 20150505150415) do
     t.integer  "list_id"
   end
 
-  add_index "tasks", ["list_id"], name: "index_tasks_on_list_id"
+  add_index "tasks", ["list_id"], name: "index_tasks_on_list_id", using: :btree
 
+  add_foreign_key "tasks", "lists"
 end
