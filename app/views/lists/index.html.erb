@@ -7,61 +7,63 @@
     <div class="lists">
       <% @lists.each do |list| %>
 
-        <div class="list">
+      <div class="list">
+
 
           <p class="lead">
             <strong><%= list.title %></strong>
             <%= link_to "Edit Title", edit_list_path(list), class: "btn btn-info" if list.status == "unarchived" %>
             <%= link_to "Archive List", list_path(list, archive: "true"), method: :put, class: "btn btn-warning" if list.status == "unarchived" %>
             <%= link_to "Delete List", list_path(list), method: :delete, class: "btn btn-danger" if list.status == "archived" %>
-            </p
+          </p>
 
           <h5><u>Check a box to mark a task complete.</u></h3>
             <%= link_to "Create New Task", new_task_path(list: list.id), class: "btn btn-success" %>
-          <% list.tasks.each do |task| %>
-            <% if task.status == "incomplete" %>
-              <div class="task">
-                <ul>
-                  <li>
-                    <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
-                    <%= label_tag task.title %>
-                    <br>
-                    <%= label_tag "Description" %>
-                    <%= task.description %>
-                    <br>
-                    <%= label_tag "Due Date" %>
-                    <%= task.due_date %>
-                    <br>
-                    <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
-                  </li>
-                </ul>
-              </div>
+            <% list.tasks.each do |task| %>
+              <% if task.status == "incomplete" %>
+                <div class="task">
+                  <ul>
+                    <li>
+                      <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
+                      <%= label_tag task.title %>
+                      <br>
+                      <%= label_tag "Description" %>
+                      <%= task.description %>
+                      <br>
+                      <%= label_tag "Due Date" %>
+                      <%= task.due_date %>
+                      <br>
+                      <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
+                    </li>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if task.status == "complete" %>
+                <div class="task hide tasks-hidden">
+                <p class="lead"> This task is complete</p>
+                  <ul>
+                    <li>
+                      <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
+                      <%= label_tag task.title %>
+                      <br>
+                      <%= label_tag "Description" %>
+                      <%= task.description %>
+                      <br>
+                      <%= label_tag "Due Date" %>
+                      <%= task.due_date %>
+                      <br>
+                      <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
+                    </li>
+                  </ul>
+                </div>
+              <% end %>
             <% end %>
 
-            <% if task.status == "complete" %>
-              <div class="task hide tasks-hidden">
-              <p class="lead"> This task is complete</p>
-                <ul>
-                  <li>
-                    <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
-                    <%= label_tag task.title %>
-                    <br>
-                    <%= label_tag "Description" %>
-                    <%= task.description %>
-                    <br>
-                    <%= label_tag "Due Date" %>
-                    <%= task.due_date %>
-                    <br>
-                    <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
-                  </li>
-                </ul>
-              </div>
-            <% end %>
 
-        </div>
+      </div>
 
         <% end %>
-      <% end %>
     </div>
 
     <div class="change-views">
