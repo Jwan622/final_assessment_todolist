@@ -59,6 +59,27 @@
                 </div>
               <% end %>
             <% end %>
+
+            <div class="filter-section">
+              <label for="search_table"><strong>Each List is Searchable by Keyword in Title or Description</strong></label><br>
+              <input type="text" id="search_table" placeholder="keywords">
+            </div>
+
+            <div class="taggings-section">
+              <% if list.tasks %>
+                <% list.tasks.each do |task| %>
+                  <% if task.tags %>
+                    <% task.tags.each do |tag| %>
+                      <p><u class="mark"><%= tag.tag_name %></u></p>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+
+
+
+
         </div>
       <% end %>
     </div>
@@ -68,6 +89,7 @@
       <%= link_to "View Archived Lists", lists_path(see_archive: true), class: "btn btn-info btn-lg" %>
       <%= link_to "View Unarchived Lists", lists_path(see_unarchive: true), class: "btn btn-info btn-lg" %>
     </div>
+
 </div>
 
 
@@ -77,6 +99,30 @@
     // function clearCurrentLists() {
     //   $(".lists").html("")
     // }
+
+    function searchByColumns(searchVal) {
+      var table = $('.table-index')
+      table.find('tr').each(function(index, row){
+        var allDataPerRow = $(row).find('td');
+        if (allDataPerRow.length > 0) {
+          var found = false;
+          allDataPerRow.each(function(index, td) {
+            var regExp = new RegExp(searchVal, "i");
+            var cellDataLowercased = ($(td).text().toLowerCase())
+            if(regExp.test(cellDataLowercased)) {
+              found = true
+              return false;
+            }
+          });
+          if(found === true) {
+            $(row).show();
+          }
+          else {
+            $(row).hide();
+          }
+        }
+      });
+    }
 
     function redrawListsAndTasks(response) {
       // clearCurrentLists()
@@ -98,6 +144,10 @@
       else {
         $("button").html("See Completed Tasks")
       }
+    });
+
+    $('#search_table').keyup(function() {
+      searchByColumns($(this).val().toLowerCase());
     });
 
 
