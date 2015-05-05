@@ -80,9 +80,23 @@
         $("button").html("Hide Completed Tasks")
       }
       else {
-        $("button").html("Show Completed Tasks")
+        $("button").html("See Completed Tasks")
       }
     });
-    // $(".lists").on("change", ":checkbox", function(box))
+
+
+    $(".lists").on("change", ":checkbox", function(box){
+      var box = $(this)
+      var item_number = parseInt(box[0].name.match(/[^[\]]+(?=])/g)[0])
+
+      $.ajax( { type: "PUT",
+        url: "tasks/" + item_number,
+        data: { id: item_number, type: "status-checkbox" },
+        success: function(text) {
+          debugger;
+          // changeDom($(box[0].closest("div")))
+        }
+      });
+    })
   });
 </script>

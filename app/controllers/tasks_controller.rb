@@ -24,13 +24,23 @@ class TasksController < ApplicationController
   end
 
   def update
-    task = Task.find(params[:id].to_i)
-    if task.update_attributes(update_task_params)
-      flash[:notice] = "Task Updated"
-      redirect_to root_path
+    if params[:type] == "status-checkbox"
+      task = Task.find(params[:id].to_i)
+      task.status = "incomplete" if task.status == "complete"
+      task.status = "complete" if task.status == "incomplete"
+      if task.save
+        render nothing: true
+        # apparently I couldn't use a redirect_to here, but only render nothing: true
+      end
     else
-      flash[:error] = "Something wrong with the update."
-      render :edit
+      task = Task.find(params[:id].to_i)
+      if task.update_attributes(update_task_params)
+        flash[:notice] = "Task Updated"
+        redirect_to root_path
+      else
+        flash[:error] = "Something wrong with the update."
+        render :edit
+      end
     end
   end
 
