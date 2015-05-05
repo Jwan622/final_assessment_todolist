@@ -31,7 +31,6 @@ class TaskActionsTest < ActionDispatch::IntegrationTest
     fill_in "task[title]", with: "New Task"
     fill_in "task[description]", with: "New Description"
     fill_in "task[due_date]", with: "2015-06-22"
-
     click_button "Update this Task"
 
     assert_equal root_path, current_path
