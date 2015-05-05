@@ -101,16 +101,25 @@
       var searchVal = searchVal.toLowerCase()
       var list = self.closest(".list")
       list.find("div[class='task']").each(function(index, task){
+        // find all of the tasks in the list and iterate
+        // a task represents a div with a task which I'll be hiding or showing later.
+
         var allTextPerList = $(task).text()
+        // this is some sloppy grab to see if the tasks have text
+
         if (allTextPerList.length > 0) {
           var found = false;
           var searchWords = []
           $(task).find("label").each(function(index, label) {
             searchWords.push($(label).text())
+            //push all of the text into searchWords
           })
+
           var regExp = new RegExp(searchVal, "i");
+          // good old regex match, ugh
           searchWords.forEach(function(term, index) {
             if(regExp.test(term.toLowerCase())) {
+              // if regex matches, found = true
               found = true;
               return false;
             }
