@@ -1,0 +1,18 @@
+<div class="row">
+  <h1>Your Todo Lists</h1>
+  <% @lists.each do |list| %>
+    <div class="list">
+      <%= list.title %>
+      <% list.tasks.each do |task| %>
+        <div class="task">
+          <ul>
+            <li>
+              <%= check_box("task", task.id, {checked: false}) %>
+              <%= label_tag task.title %>
+            </li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
