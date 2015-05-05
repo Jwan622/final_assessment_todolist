@@ -29,6 +29,7 @@ class TasksController < ApplicationController
       task.status = "incomplete" if task.status == "complete"
       task.status = "complete" if task.status == "incomplete"
       if task.save
+        require 'pry' ; binding.pry
         render nothing: true
         # apparently I couldn't use a redirect_to here, but only render nothing: true
       end
