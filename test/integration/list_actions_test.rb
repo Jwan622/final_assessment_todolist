@@ -4,7 +4,7 @@ class ListActionsTest < ActionDispatch::IntegrationTest
   def test_user_can_create_list
     visit root_path
 
-    click_link "Create New List"
+    click_link "Create New LIST"
     fill_in "list[title]", with: "New List"
     click_button "Submit This Damn List"
 
@@ -33,7 +33,7 @@ class ListActionsTest < ActionDispatch::IntegrationTest
     create(:list, title: "Old Name")
     visit root_path
     save_and_open_page
-    
+
     click_link "Archive List"
 
     assert_equal root_path, current_path
