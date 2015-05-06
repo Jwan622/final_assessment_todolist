@@ -33,6 +33,7 @@ class TasksController < ApplicationController
       end
     else
       task = Task.find(params[:id].to_i)
+      photo = Photo.create(update_photo_params.merge(task_id: task.id))
       if task.update_attributes(update_task_params)
         flash[:notice] = "Task Updated"
         redirect_to root_path
@@ -51,5 +52,9 @@ class TasksController < ApplicationController
 
   def update_task_params
     params.require(:task).permit(:title, :description, :due_date)
+  end
+
+  def update_photo_params
+    params.require(:task).permit(:avatar)
   end
 end

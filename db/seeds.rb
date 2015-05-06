@@ -1,11 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
 unarchived_list1 = List.create(title: "Unarchived List1", status:"unarchived")
 unarchived_list2 = List.create(title: "Unarchived List2", status:"unarchived")
 unarchived_list3 = List.create(title: "Unarchived List3", status: "unarchived")
