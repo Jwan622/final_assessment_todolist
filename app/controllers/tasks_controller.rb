@@ -26,8 +26,7 @@ class TasksController < ApplicationController
   def update
     if params[:type] == "status-checkbox"
       task = Task.find(params[:id].to_i)
-      task.status = "incomplete" if task.status == "complete"
-      task.status = "complete" if task.status == "incomplete"
+      task.status == "incomplete" ? task.status = "complete" : task.status= "incomplete"
       if task.save
         render nothing: true
         # apparently I couldn't use a redirect_to here, but only render nothing: true
