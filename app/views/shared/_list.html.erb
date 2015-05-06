@@ -86,6 +86,12 @@
                   <%= task.status %>
                 </span>
                 <br>
+                <%= label_tag "Photo" %>
+                <span class="task-photo">
+                  <%= image_tag(task.photo.avatar.url) if task.photo %>
+                  <%= link_to "Delete Photo", photo_path(task.photo), method: :delete, class: "btn btn-danger btn-sm  " if task.photo %>
+                </span>
+
                 <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
               </li>
             </ul>

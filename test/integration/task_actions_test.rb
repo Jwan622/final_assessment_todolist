@@ -40,4 +40,13 @@ class TaskActionsTest < ActionDispatch::IntegrationTest
     assert list.tasks.count == 2
     assert page.has_selector?(".task", count:2)
   end
+
+  def test_user_can_upload_photo
+    task = create(:task)
+    visit edit_task_path(task)
+    attach_file "task[avatar]", Rails.root.join('test', 'fixtures', 'todo.jpg')
+    click_button "Update this Task"
+
+    assert page.has_content?("Task Updated")
+  end
 end
