@@ -6,12 +6,12 @@ class TasksController < ApplicationController
 
   def create
     task = Task.new(create_task_params)
-    list = List.find(params[:task][:list].to_i)
+    @list = List.find(params[:task][:list].to_i)
 
     if task.save
-      list.tasks << task
+      @list.tasks << task
       flash[:notice] = "Task successfully created."
-      list.save
+      @list.save
       redirect_to root_path
     else
       flash[:error] = "Something went wrong with creating your task"

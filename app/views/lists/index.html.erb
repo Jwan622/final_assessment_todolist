@@ -19,7 +19,7 @@
 
           <h5><u>(Check a box to mark a task complete.)</u></h3>
 
-            <div class="incomplete-section">
+            <div class="incomplete-section sortable">
               <% list.tasks.each do |task| %>
                 <% if task.status == "incomplete" %>
                   <div class="task task-incomplete">
@@ -68,7 +68,7 @@
               <% end %>
             </div>
 
-            <div class="complete-section">
+            <div class="complete-section sortable">
               <% list.tasks.each do |task| %>
                 <% if task.status == "complete" %>
                   <div class="task hide tasks-hidden">
@@ -123,16 +123,21 @@
               <% end %>
             </div>
 
+            <div class="sorting-section">
+              <%= button_tag "Sort By Title (Ascending)", data: { type: "title", dir: "ascending" }, class: "btn btn-info" %>
+              <%= button_tag "Sort By Due Date (Earliest)", data: { type: "date", dir: "ascending" }, class: "btn btn-info" %>
+              <%= button_tag "Sort By Status (Complete)", data: { type: "status", dir: "ascending" }, class: "btn btn-info" %>
+            </div>
+
         </div>
       <% end %>
     </div>
 
     <div class="change-views">
-      <%= button_tag "See Completed Tasks", class: "btn btn-info btn-lg" %>
+      <%= button_tag "See Completed Tasks", class: "btn btn-info btn-lg btn-completed" %>
       <%= link_to "View Archived Lists", lists_path(see_archive: true), class: "btn btn-info btn-lg" %>
       <%= link_to "View Unarchived Lists", lists_path(see_unarchive: true), class: "btn btn-info btn-lg" %>
     </div>
-
 </div>
 
 
@@ -238,13 +243,51 @@
       // completed section
     }
 
-    $(".change-views").on("click", ":button", function(btn){
-      $(".tasks-hidden").toggleClass("hide")
-      if ($("button").text() == "See Completed Tasks") {
-        $("button").html("Hide Completed Tasks")
+    function rearrangeBySort(allTasksPerSection) {
+      // each list has two sections to sort. the incomplete and the completed tasks
+      var individualList = $(this)
+
+      if (allTasksPerSection.attr("class").match("task-incomplete")) {
+        // be wary that match is going to be called on nil if the list is empty.
+        individualList.find(".incomplete-section.sortable").empty()
+        allTasksPerSection.each(function() {
+          individualList.find(".incomplete-section.sortable").append(this);
+        })
       }
       else {
-        $("button").html("See Completed Tasks")
+
+      }
+    }
+
+    function changeSortButtonNames(sortButton) {
+      if (sortButton.text() === "Sort By Title (Descending)") {
+        sortButton.text("Sort By Title (Ascending)")
+        sortButton.data().dir = "ascending"
+      } else if (sortButton.text() === "Sort By Title (Ascending)") {
+        sortButton.text("Sort By Title (Descending)")
+        sortButton.data().dir = "descending"
+      } else if (sortButton.text() === "Sort By Due Date (Earliest)") {
+        sortButton.text("Sort By Due Date (Latest)")
+        sortButton.data().dir = "descending"
+      } else if (sortButton.text() === "Sort By Due Date (Latest)") {
+        sortButton.text("Sort By Due Date (Earliest)")
+        sortButton.data().dir = "ascending"
+      } else if (sortButton.text() === "Sort By Status (Complete)") {
+        sortButton.text("Sort By Status (Incomplete)")
+        sortButton.data().dir = "ascending"
+      } else if (sortButton.text() === "Sort By Status (Incomplete)") {
+        sortButton.text("Sort By Status (Complete)")
+        sortButton.data().dir = "descending"
+      };
+    };
+
+    $(".change-views").on("click", ":button", function(btn){
+      $(".tasks-hidden").toggleClass("hide")
+      if ($("button.btn-completed").text() == "See Completed Tasks") {
+        $("button.btn-completed").html("Hide Completed Tasks")
+      }
+      else {
+        $("button.btn-completed").html("See Completed Tasks")
       }
     });
 
@@ -260,7 +303,6 @@
       searchByStatus(self, searchStatus)
     })
 
-
     $(".lists").on("change", ":checkbox", function(box){
       var checkBox = $(this);
       var checkedTask = checkBox.closest("div")
@@ -273,6 +315,49 @@
           reviseTask(checkedTask)
         }
       });
+    })
+
+    $(".sorting-section").on("click", ":button", function() {
+      var sortButton = $(this)
+      var sortMethod = $(this).data().type
+      var sortingSections = sortButton.closest(".list").find(".sortable")
+      var individualList = $(this).closest(".list")
+      // sortingSections is both sections here for incomplete and complete sections
+      var sortDirection = $(this).data().dir
+
+      changeSortButtonNames(sortButton)
+      if (sortDirection === "ascending") {
+        sortingSections.each(function(index, section) {
+          var allTasksPerSection = $(section).find(".task")
+          allTasksPerSection.sort(function(a,b) {
+            if (sortMethod === "date") {
+              return Date.parse($($(a).find("span")[2]).text().trim()) - Date.parse($($(b).find("span")[2]).text().trim())
+            } else if (sortMethod === "title") {
+              return $($(a).find("span")[0]).text().trim().localeCompare($($(b).find("span")[0]).text().trim());
+            } else {
+
+              return $($(a).find("span")[3]).text().trim().localeCompare($($(b).find("span")[3]).text().trim());
+            }
+          })
+        rearrangeBySort.call(individualList, allTasksPerSection);
+        // if I did rearrangeBySort.bind(individualList, allTasksPerSection), what would this be?
+        });
+      } else if (sortDirection === "descending") {
+        sortingSections.each(function(index, section) {
+          var allTasksPerSection = $(section).find(".task")
+          allTasksPerSection.sort(function(a,b) {
+            if (sortMethod === "date") {
+              return Date.parse($($(b).find("span")[2]).text().trim()) - Date.parse($($(a).find("span")[2]).text().trim())
+            } else if (sortMethod === "title") {
+              return $($(b).find("span")[0]).text().trim().localeCompare($($(a).find("span")[0]).text().trim());
+            } else {
+              return $($(b).find("span")[3]).text().trim().localeCompare($($(a).find("span")[3]).text().trim());
+            }
+          })
+        rearrangeBySort.call(individualList, allTasksPerSection);
+        // if I did rearrangeBySort.bind(individualList, allTasksPerSection), what would this be?
+        });
+      }
     })
   });
 </script>
