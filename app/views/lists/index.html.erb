@@ -267,8 +267,8 @@
       } else if (sortButton.text() === "Sort By Status (Incomplete)") {
         sortButton.text("Sort By Status (Complete)")
         sortButton.data().dir = "descending"
-      }
-    }
+      };
+    };
 
     $(".change-views").on("click", ":button", function(btn){
       $(".tasks-hidden").toggleClass("hide")
@@ -314,7 +314,6 @@
       var sortDirection = $(this).data().dir
 
       changeSortButtonNames(sortButton)
-
       if (sortDirection === "ascending") {
         sortingSections.each(function(index, section) {
           var allTasksPerSection = $(section).find(".task")
@@ -324,6 +323,7 @@
             } else if (sortMethod === "title") {
               return $($(a).find("span")[0]).text().trim().localeCompare($($(b).find("span")[0]).text().trim());
             } else {
+
               return $($(a).find("span")[3]).text().trim().localeCompare($($(b).find("span")[3]).text().trim());
             }
           })
