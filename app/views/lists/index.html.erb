@@ -117,9 +117,9 @@
             </div>
 
             <div class="sorting-section">
-              <%= button_tag "Sort By Title", data: { type: "title" }, class: "btn btn-info" %>
-              <%= button_tag "Sort By Due Date", data: { type: "date" }, class: "btn btn-info" %>
-              <%= button_tag "Sort By Status", data: { type: "status" }, class: "btn btn-info" %>
+              <%= button_tag "Sort By Title (Ascending)", data: { type: "title", dir: "ascending" }, class: "btn btn-info" %>
+              <%= button_tag "Sort By Due Date (Earliest)", data: { type: "date", dir: "ascending" }, class: "btn btn-info" %>
+              <%= button_tag "Sort By Status (Complete)", data: { type: "status", dir: "ascending" }, class: "btn btn-info" %>
             </div>
 
         </div>
@@ -248,6 +248,22 @@
       }
     }
 
+    function changeSortButtonNames(sortButton) {
+      if (sortButton.text() === "Sort By Title (Descending)") {
+        sortButton.text("Sort By Title (Ascending)")
+      } else if (sortButton.text() === "Sort By Title (Ascending)") {
+        sortButton.text("Sort By Title (Descending)")
+      } else if (sortButton.text() === "Sort By Due Date (Earliest)") {
+        sortButton.text("Sort By Due Date (Latest)")
+      } else if (sortButton.text() === "Sort By Due Date (Latest)") {
+        sortButton.text("Sort By Due Date (Earliest)")
+      } else if (sortButton.text() === "Sort By Status (Complete)") {
+        sortButton.text("Sort By Status (Incomplete)")
+      } else if (sortButton.text() === "Sort By Status (Incomplete)") {
+        sortButton.text("Sort By Status (Complete)")
+      }
+    }
+
     $(".change-views").on("click", ":button", function(btn){
       $(".tasks-hidden").toggleClass("hide")
       if ($("button.btn-completed").text() == "See Completed Tasks") {
@@ -289,6 +305,8 @@
       var sortingSections = sortButton.closest(".list").find(".sortable")
       var individualList = $(this).closest(".list")
       // sortingSections is both sections here for incomplete and complete sections
+
+      changeSortButtonNames(sortButton)
 
       sortingSections.each(function(index, section) {
         var allTasksPerSection = $(section).find(".task")
