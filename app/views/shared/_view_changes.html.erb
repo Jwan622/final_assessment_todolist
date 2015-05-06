@@ -1,0 +1,5 @@
+<div class="change-views">
+  <%= button_tag "See Completed Tasks", class: "btn btn-info btn-lg btn-completed" %>
+  <%= link_to "View Archived Lists", lists_path(see_archive: true), class: "btn btn-info btn-lg" %>
+  <%= link_to "View Unarchived Lists", lists_path(see_unarchive: true), class: "btn btn-info btn-lg" %>
+</div>
