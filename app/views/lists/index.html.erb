@@ -22,7 +22,7 @@
             <div class="incomplete-section">
               <% list.tasks.each do |task| %>
                 <% if task.status == "incomplete" %>
-                  <div class="task task-incomplete" data-task= <%= task %>>
+                  <div class="task task-incomplete">
                     <ul>
                       <li>
                         <%= check_box("task", task.id, { checked: false, class: "checkbox-task" }) %>
@@ -208,21 +208,21 @@
     // YO eff repainting the dom with a getJSON. NO way. That seems terrible.
 
     function reviseTask(taskRow) {
-      var taskRow = $(taskRow)
+      var taskRow1 = $(taskRow)
       // .find("div[class*='task-incomplete']"))
-      var completeSection = $(taskRow.parent()
-      var incompleteSection = $(taskRow.parent()
+      var completeSection = $(taskRow.parent().parent().find(".complete-section"))
+      var incompleteSection = $(taskRow.parent().parent().find(".incomplete-section"))
 
-      if (taskRow.find("span[class='task-info-status']").text().trim() === "incomplete") {
-        taskRow.find("span[class='task-info-status']").text("complete")
-        taskRow.attr("class", "task hide tasks-hidden")
-        completeSection.append(taskRow);
+      if (taskRow1.find("span[class='task-info-status']").text().trim() === "incomplete") {
+        taskRow1.find("span[class='task-info-status']").text("complete")
+        taskRow1.attr("class", "task hide tasks-hidden")
+        completeSection.append(taskRow1);
       } else {
-        taskRow.find("span[class='task-info-status']").text("incomplete")
-        taskRow.attr("class", "task task-incomplete")
-        incompleteSection.append(taskRow);
+        taskRow1.find("span[class='task-info-status']").text("incomplete")
+        taskRow1.attr("class", "task task-incomplete")
+        taskRow1.find("p").remove()
+        incompleteSection.append(taskRow1);
       }
-      taskRow.remove()
       // not making a JSON call. I update the thing in the database whne I click a button and I simply move the task to the
       // completed section
     }
