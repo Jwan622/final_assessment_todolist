@@ -9,7 +9,6 @@
 
         <div class="list">
 
-
           <p>
             <span class="lead list-title"><%= list.title %></span>
             <%= link_to "Edit Title", edit_list_path(list), class: "btn btn-info" if list.status == "unarchived" %>
@@ -19,76 +18,83 @@
           </p>
 
           <h5><u>(Check a box to mark a task complete.)</u></h3>
-            <% list.tasks.each do |task| %>
-              <% if task.status == "incomplete" %>
-                <div class="task task-incomplete" data-task= <%= task %>>
-                  <ul>
-                    <li>
-                      <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
-                      <span class="task-info">
-                        <%= label_tag task.title %>
-                      </span>
 
-                      <br>
+            <div class="incomplete-section">
+              <% list.tasks.each do |task| %>
+                <% if task.status == "incomplete" %>
+                  <div class="task task-incomplete">
+                    <ul>
+                      <li>
+                        <%= check_box("task", task.id, { checked: false, class: "checkbox-task" }) %>
+                        <span class="task-info">
+                          <%= label_tag task.title %>
+                        </span>
 
-                      <%= label_tag "Description" %>
-                      <span class="task-info">
-                        <%= task.description %>
-                      </span>
+                        <br>
 
-                      <br>
+                        <%= label_tag "Description" %>
+                        <span class="task-info">
+                          <%= task.description %>
+                        </span>
 
-                      <%= label_tag "Due Date" %>
-                      <span class="task-info">
-                        <%= task.due_date %>
-                      </span>
+                        <br>
 
-                      <br>
+                        <%= label_tag "Due Date" %>
+                        <span class="task-info">
+                          <%= task.due_date %>
+                        </span>
 
-                      <%= label_tag "Status" %>
-                      <span class="task-info-status">
-                        <%= task.status %>
-                      </span>
+                        <br>
 
-                      <br>
+                        <%= label_tag "Status" %>
+                        <span class="task-info-status">
+                          <%= task.status %>
+                        </span>
 
-                      <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
-                    </li>
-                  </ul>
-                </div>
+                        <br>
+
+                        <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
+                      </li>
+                    </ul>
+                  </div>
+                <% end %>
               <% end %>
+            </div>
 
-              <% if task.status == "complete" %>
-                <div class="task hide tasks-hidden">
-                <p class="lead"> This task is complete</p>
-                  <ul>
-                    <li>
-                      <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
-                      <span class="task-info">
-                        <%= label_tag task.title %>
-                      </span>
-                      <br>
-                      <%= label_tag "Description" %>
-                      <span class="task-info">
-                        <%= task.description %>
-                      </span>
-                      <br>
-                      <%= label_tag "Due Date" %>
-                      <span class="task-info">
-                        <%= task.due_date %>
-                      </span>
-                      <br>
-                      <%= label_tag "Status" %>
-                      <span class="task-info-status">
-                        <%= task.status %>
-                      </span>
-                      <br>
-                      <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
-                    </li>
-                  </ul>
-                </div>
+            <div class="complete-section">
+              <% list.tasks.each do |task| %>
+                <% if task.status == "complete" %>
+                  <div class="task hide tasks-hidden">
+                  <p class="lead"> This task is complete</p>
+                    <ul>
+                      <li>
+                        <%= check_box("task", task.id, {checked: true, class: "checkbox-task" }) %>
+                        <span class="task-info">
+                          <%= label_tag task.title %>
+                        </span>
+                        <br>
+                        <%= label_tag "Description" %>
+                        <span class="task-info">
+                          <%= task.description %>
+                        </span>
+                        <br>
+                        <%= label_tag "Due Date" %>
+                        <span class="task-info">
+                          <%= task.due_date %>
+                        </span>
+                        <br>
+                        <%= label_tag "Status" %>
+                        <span class="task-info-status">
+                          <%= task.status %>
+                        </span>
+                        <br>
+                        <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
+                      </li>
+                    </ul>
+                  </div>
+                <% end %>
               <% end %>
-            <% end %>
+            </div>
 
             <div class="filter-section">
               <label for="search_table_by_date_keyword_desc_date"><strong>Search Bar via Title, Description, or Date</strong></label><br>
@@ -141,7 +147,9 @@
           found = true;
         };
         if(found === true) {
-          debugger;
+          //for some reason, hide(), show() wasn't working and also the bug was the == instead of the ===.
+          // There are 6 incomplete adn 2 complete tasks but we were only iterating like 6 times with the debugger below the
+          // if (searchVal === status) line.
           $(task).removeClass("hide")
         }
         else {
@@ -149,25 +157,6 @@
         }
       })
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     function searchByColumns(self, searchVal) {
       var searchVal = searchVal.toLowerCase()
@@ -206,15 +195,36 @@
       });
     };
 
-    function redrawListsAndTasks(response) {
-      // clearCurrentLists()
-      $(".lists").append(response)
-    }
+    // function redrawListsAndTasks(response) {
+    //   // clearCurrentLists()
+    //   $(".lists").append(response)
+    // }
+    //
+    // function getRevisedListsandTasks() {
+    //   $.getJSON("/", function(response) {
+    //     redrawListsAndTasks(response)
+    //   });
+    // }
+    // YO eff repainting the dom with a getJSON. NO way. That seems terrible.
 
-    function getRevisedListsandTasks() {
-      $.getJSON("/", function(response) {
-        redrawListsAndTasks(response)
-      });
+    function reviseTask(taskRow) {
+      var taskRow1 = $(taskRow)
+      // .find("div[class*='task-incomplete']"))
+      var completeSection = $(taskRow.parent().parent().find(".complete-section"))
+      var incompleteSection = $(taskRow.parent().parent().find(".incomplete-section"))
+
+      if (taskRow1.find("span[class='task-info-status']").text().trim() === "incomplete") {
+        taskRow1.find("span[class='task-info-status']").text("complete")
+        taskRow1.attr("class", "task hide tasks-hidden")
+        completeSection.append(taskRow1);
+      } else {
+        taskRow1.find("span[class='task-info-status']").text("incomplete")
+        taskRow1.attr("class", "task task-incomplete")
+        taskRow1.find("p").remove()
+        incompleteSection.append(taskRow1);
+      }
+      // not making a JSON call. I update the thing in the database whne I click a button and I simply move the task to the
+      // completed section
     }
 
     $(".change-views").on("click", ":button", function(btn){
@@ -241,14 +251,14 @@
 
 
     $(".lists").on("change", ":checkbox", function(box){
-      var box = $(this)
-      var item_number = parseInt(box[0].name.match(/[^[\]]+(?=])/g)[0])
+      var checkBox = $(this);
+      var item_number = parseInt(checkBox[0].name.match(/[^[\]]+(?=])/g)[0]);
 
       $.ajax( { type: "PUT",
         url: "tasks/" + item_number,
         data: { id: item_number, type: "status-checkbox" },
         success: function(text) {
-          getRevisedListsandTasks()
+          reviseTask($(checkBox[0].closest("div")))
         }
       });
     })
