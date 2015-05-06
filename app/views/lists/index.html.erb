@@ -251,16 +251,22 @@
     function changeSortButtonNames(sortButton) {
       if (sortButton.text() === "Sort By Title (Descending)") {
         sortButton.text("Sort By Title (Ascending)")
+        sortButton.data().dir = "ascending"
       } else if (sortButton.text() === "Sort By Title (Ascending)") {
         sortButton.text("Sort By Title (Descending)")
+        sortButton.data().dir = "descending"
       } else if (sortButton.text() === "Sort By Due Date (Earliest)") {
         sortButton.text("Sort By Due Date (Latest)")
+        sortButton.data().dir = "descending"
       } else if (sortButton.text() === "Sort By Due Date (Latest)") {
         sortButton.text("Sort By Due Date (Earliest)")
+        sortButton.data().dir = "ascending"
       } else if (sortButton.text() === "Sort By Status (Complete)") {
         sortButton.text("Sort By Status (Incomplete)")
+        sortButton.data().dir = "ascending"
       } else if (sortButton.text() === "Sort By Status (Incomplete)") {
         sortButton.text("Sort By Status (Complete)")
+        sortButton.data().dir = "descending"
       }
     }
 
@@ -305,23 +311,41 @@
       var sortingSections = sortButton.closest(".list").find(".sortable")
       var individualList = $(this).closest(".list")
       // sortingSections is both sections here for incomplete and complete sections
+      var sortDirection = $(this).data().dir
 
       changeSortButtonNames(sortButton)
 
-      sortingSections.each(function(index, section) {
-        var allTasksPerSection = $(section).find(".task")
-        allTasksPerSection.sort(function(a,b) {
-          if (sortMethod === "date") {
-            return Date.parse($($(a).find("span")[2]).text().trim()) - Date.parse($($(b).find("span")[2]).text().trim())
-          } else if (sortMethod === "title") {
-            return $($(a).find("span")[0]).text().trim().localeCompare($($(b).find("span")[0]).text().trim());
-          } else {
-            return $($(a).find("span")[3]).text().trim().localeCompare($($(b).find("span")[3]).text().trim());
-          }
-        })
+      if (sortDirection === "ascending") {
+        sortingSections.each(function(index, section) {
+          var allTasksPerSection = $(section).find(".task")
+          allTasksPerSection.sort(function(a,b) {
+            if (sortMethod === "date") {
+              return Date.parse($($(a).find("span")[2]).text().trim()) - Date.parse($($(b).find("span")[2]).text().trim())
+            } else if (sortMethod === "title") {
+              return $($(a).find("span")[0]).text().trim().localeCompare($($(b).find("span")[0]).text().trim());
+            } else {
+              return $($(a).find("span")[3]).text().trim().localeCompare($($(b).find("span")[3]).text().trim());
+            }
+          })
         rearrangeBySort.call(individualList, allTasksPerSection);
         // if I did rearrangeBySort.bind(individualList, allTasksPerSection), what would this be?
-      });
+        });
+      } else if (sortDirection === "descending") {
+        sortingSections.each(function(index, section) {
+          var allTasksPerSection = $(section).find(".task")
+          allTasksPerSection.sort(function(a,b) {
+            if (sortMethod === "date") {
+              return Date.parse($($(b).find("span")[2]).text().trim()) - Date.parse($($(a).find("span")[2]).text().trim())
+            } else if (sortMethod === "title") {
+              return $($(b).find("span")[0]).text().trim().localeCompare($($(a).find("span")[0]).text().trim());
+            } else {
+              return $($(b).find("span")[3]).text().trim().localeCompare($($(a).find("span")[3]).text().trim());
+            }
+          })
+        rearrangeBySort.call(individualList, allTasksPerSection);
+        // if I did rearrangeBySort.bind(individualList, allTasksPerSection), what would this be?
+        });
+      }
     })
   });
 </script>
