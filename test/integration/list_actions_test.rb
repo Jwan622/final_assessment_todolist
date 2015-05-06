@@ -55,4 +55,16 @@ class ListActionsTest < ActionDispatch::IntegrationTest
     end
     assert page.has_content?("List Destroyed")
   end
+
+  def test_user_can_update_list_name_with_unique_title
+    create(:list)
+
+    visit root_path
+    click_link "Edit Title"
+    fill_in "list[title]", with: "List Titlez"
+    click_button "Change Title"
+
+    assert page.has_content?("List Titlez")
+    refute page.has_content?("List Title1")
+  end
 end
