@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :photo do
-    task_id 1
+    avatar File.new(Rails.root.join('test', 'fixtures', 'todo.jpg'))
   end
-
 end

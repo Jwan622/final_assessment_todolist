@@ -5,5 +5,6 @@ class Photo < ActiveRecord::Base
                               :path => "public/assets/avatars/:basename.:extension",
                               :url => "public/assets/avatars/:basename.:extension",
                               :default_url => "public/assets/avatars/missing.png"
-  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/,
+                                            :message => "Only image files are allowed."
 end

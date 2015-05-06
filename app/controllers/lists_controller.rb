@@ -43,6 +43,7 @@ class ListsController < ApplicationController
         flash[:notice] = "List updated"
         redirect_to root_path
       else
+        flash[:error] = "Pick Another Name"
         render :edit
       end
     end
