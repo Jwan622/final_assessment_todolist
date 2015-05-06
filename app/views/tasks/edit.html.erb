@@ -1,5 +1,5 @@
 <div class="row">
-  <%= form_for(@task, url: task_path, html: { class: "form-horizontal" }) do |f| %>
+  <%= form_for(@task, url: task_path, html: { :multipart => true, class: "form-horizontal" }) do |f| %>
   <div class="control-group">
     <%= f.label :title, class: "control-label" %>
     <%= f.text_field :title, placeholder: @task.title %>
@@ -15,9 +15,13 @@
     <%= f.date_field :due_date, placeholder: @task.due_date %>
   </div>
 
+  <div class="control-group">
+    <%= f.label :avatar, "Upload PDF", class:"col-sm-2" %>
+    <%= f.file_field :avatar %>
+  </div>
+
   <div>
     <%= f.submit "Update this Task" %>
   </div>
   <% end %>
-
 </div>
