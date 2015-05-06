@@ -51,6 +51,7 @@
                           <%= task.status %>
                         </span>
                         <br>
+
                         <%= label_tag "Photo" %>
                         <span class="task-photo">
                           <%= image_tag(task.photo.avatar.url) if task.photo %>
@@ -137,9 +138,6 @@
 
 <script charset="utf-8">
   $(document).ready(function() {
-    // function clearCurrentLists() {
-    //   $(".lists").html("")
-    // }
 
     function searchByStatus(self, searchVal) {
       var searchVal = searchVal.toLowerCase();
@@ -221,7 +219,14 @@
 
       if (taskRow1.find("span[class='task-info-status']").text().trim() === "incomplete") {
         taskRow1.find("span[class='task-info-status']").text("complete")
-        taskRow1.attr("class", "task hide tasks-hidden")
+        taskRow1.prepend("<p class='lead'> This task is complete</p>")
+        if (completeSection.children().attr("class") === "task hide tasks-hidden") {
+          // depending on whether the complete tasks are shown, either hide or show the new task.
+          taskRow1.attr("class", "task hide tasks-hidden")
+        } else {
+          taskRow1.attr("class", "task tasks-hidden")
+        }
+        debugger;
         completeSection.append(taskRow1);
       } else {
         taskRow1.find("span[class='task-info-status']").text("incomplete")
@@ -258,13 +263,14 @@
 
     $(".lists").on("change", ":checkbox", function(box){
       var checkBox = $(this);
+      var checkedTask = checkBox.closest("div")
       var item_number = parseInt(checkBox[0].name.match(/[^[\]]+(?=])/g)[0]);
 
       $.ajax( { type: "PUT",
         url: "tasks/" + item_number,
         data: { id: item_number, type: "status-checkbox" },
         success: function(text) {
-          reviseTask($(checkBox[0].closest("div")))
+          reviseTask(checkedTask)
         }
       });
     })
