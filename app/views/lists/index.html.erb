@@ -19,7 +19,6 @@
 
           <h5><u>(Check a box to mark a task complete.)</u></h3>
 
-
             <div class="incomplete-section">
               <% list.tasks.each do |task| %>
                 <% if task.status == "incomplete" %>
@@ -59,9 +58,11 @@
                     </ul>
                   </div>
                 <% end %>
-              </div>
+              <% end %>
+            </div>
 
-              <div class="complete-section">
+            <div class="complete-section">
+              <% list.tasks.each do |task| %>
                 <% if task.status == "complete" %>
                   <div class="task hide tasks-hidden">
                   <p class="lead"> This task is complete</p>
@@ -92,8 +93,8 @@
                     </ul>
                   </div>
                 <% end %>
-              </div>
-            <% end %>
+              <% end %>
+            </div>
 
             <div class="filter-section">
               <label for="search_table_by_date_keyword_desc_date"><strong>Search Bar via Title, Description, or Date</strong></label><br>
@@ -208,15 +209,17 @@
 
     function reviseTask(taskRow) {
       var taskRow = $(taskRow)
+      // .find("div[class*='task-incomplete']"))
+      var completeSection = $(taskRow.parent()
+      var incompleteSection = $(taskRow.parent()
 
-      var completeSection = $(taskRow.parent().find("div[class*='tasks-hidden']"))
-      var incompleteSection = $(taskRow.parent().find("div[class*='task-incomplete']"))
-      debugger;
       if (taskRow.find("span[class='task-info-status']").text().trim() === "incomplete") {
         taskRow.find("span[class='task-info-status']").text("complete")
+        taskRow.attr("class", "task hide tasks-hidden")
         completeSection.append(taskRow);
       } else {
         taskRow.find("span[class='task-info-status']").text("incomplete")
+        taskRow.attr("class", "task task-incomplete")
         incompleteSection.append(taskRow);
       }
       taskRow.remove()
