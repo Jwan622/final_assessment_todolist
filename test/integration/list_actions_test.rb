@@ -32,7 +32,6 @@ class ListActionsTest < ActionDispatch::IntegrationTest
   def test_user_can_archive_list
     create(:list, title: "Old Name")
     visit root_path
-    save_and_open_page
 
     click_link "Archive List"
 
