@@ -29,9 +29,9 @@ unarchived_list3.tasks << task2
 unarchived_list3.tasks << task3
 unarchived_list3.tasks << task4
 
-unarchived_list1.tasks << Task.create(title: "Some Task0", due_date: Date.new(2015,6,22), description: "Finish this assessment.")
-unarchived_list1.tasks << Task.create(title: "Some Task1", due_date: Date.new(2015,6,23), description: "Prank Steve.")
 unarchived_list1.tasks << Task.create(title: "Some Task2", due_date: Date.new(2015,6,24), description: "Celebrate newfound freedom.")
+unarchived_list1.tasks << Task.create(title: "Some Task1", due_date: Date.new(2015,6,23), description: "Prank Steve.")
+unarchived_list1.tasks << Task.create(title: "Some Task0", due_date: Date.new(2015,6,22), description: "Finish this assessment.")
 unarchived_list1.tasks << Task.create(title: "Some Task3", due_date: Date.new(2015,7,22), description: "Live life.")
 unarchived_list1.tasks << Task.create(title: "Some Task4", due_date: Date.new(2015,7,22), description: "Live lifes.")
 unarchived_list1.tasks << Task.create(title: "Some Task5", due_date: Date.new(2015,7,22), description: "Live lifez.")
