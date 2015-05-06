@@ -1,8 +1,8 @@
 <div class="row">
-  <h1>Your Todo Lists</h1>
+  <h1 class="text-center">Your Todo Lists</h1>
   <br>
 
-  <p><%= link_to "Create New List", new_list_path, class: "btn btn-success" %></p>
+  <p><%= link_to "Create New LIST", new_list_path, class: "btn btn-success btn-lg" %></p>
 
     <div class="lists">
       <% @lists.each do |list| %>
@@ -10,33 +10,48 @@
         <div class="list">
 
 
-          <p class="lead">
-            <strong><%= list.title %></strong>
+          <p>
+            <span class="lead list-title"><%= list.title %></span>
             <%= link_to "Edit Title", edit_list_path(list), class: "btn btn-info" if list.status == "unarchived" %>
             <%= link_to "Archive List", list_path(list, archive: "true"), method: :put, class: "btn btn-warning" if list.status == "unarchived" %>
+            <%= link_to "Create New Task", new_task_path(list: list.id), class: "btn btn-success" %>
             <%= link_to "Delete List", list_path(list), method: :delete, class: "btn btn-danger" if list.status == "archived" %>
           </p>
 
-          <h5><u>Check a box to mark a task complete.</u></h3>
-            <%= link_to "Create New Task", new_task_path(list: list.id), class: "btn btn-success" %>
+          <h5><u>(Check a box to mark a task complete.)</u></h3>
             <% list.tasks.each do |task| %>
               <% if task.status == "incomplete" %>
-                <div class="task" data-task= <%= task %>>
+                <div class="task task-incomplete" data-task= <%= task %>>
                   <ul>
                     <li>
                       <%= check_box("task", task.id, {checked: false, class: "checkbox-task" }) %>
                       <span class="task-info">
                         <%= label_tag task.title %>
                       </span>
+
                       <br>
+
                       <%= label_tag "Description" %>
                       <span class="task-info">
                         <%= task.description %>
                       </span>
+
                       <br>
+
                       <%= label_tag "Due Date" %>
-                      <%= task.due_date %>
+                      <span class="task-info">
+                        <%= task.due_date %>
+                      </span>
+
                       <br>
+
+                      <%= label_tag "Status" %>
+                      <span class="task-info-status">
+                        <%= task.status %>
+                      </span>
+
+                      <br>
+
                       <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
                     </li>
                   </ul>
@@ -59,7 +74,14 @@
                       </span>
                       <br>
                       <%= label_tag "Due Date" %>
-                      <%= task.due_date %>
+                      <span class="task-info">
+                        <%= task.due_date %>
+                      </span>
+                      <br>
+                      <%= label_tag "Status" %>
+                      <span class="task-info-status">
+                        <%= task.status %>
+                      </span>
                       <br>
                       <%= link_to "Update Task", edit_task_path(task), class: "btn btn-warning" %>
                     </li>
@@ -69,8 +91,11 @@
             <% end %>
 
             <div class="filter-section">
-              <label for="search_table"><strong>Each List is Searchable by Keyword in Title or Description</strong></label><br>
-              <input type="text" class="search_table" placeholder="keywords">
+              <label for="search_table_by_date_keyword_desc_date"><strong>Search Bar via Title, Description, or Date</strong></label><br>
+              <input type="text" class="search_table_by_date_keyword_desc_date" placeholder="Title, Desc, or Date">
+              <br>
+              <label for="search_table_by_status"><strong>Search Bar Via Status</strong></label><br>
+              <%= select_tag(:status, options_for_select(["Complete", "Incomplete"]), { :include_blank => "Status Filter", class: "status-dropdown" }) %>
             </div>
 
             <div class="taggings-section">
@@ -100,15 +125,55 @@
 
 <script charset="utf-8">
   $(document).ready(function() {
-
     // function clearCurrentLists() {
     //   $(".lists").html("")
     // }
 
+    function searchByStatus(self, searchVal) {
+      var searchVal = searchVal.toLowerCase();
+      var list = self.closest(".list")
+      list.find("div[class*='task']").each(function(index, task){
+        // so go through the incomplete tasks of the closest current list
+        var status = $(task).find("span[class='task-info-status']").text().trim()
+        // so I confirmed we are iterating through incomplete and complete tasks in this closest list
+        var found = false
+        if (searchVal === status) {
+          found = true;
+        };
+        if(found === true) {
+          debugger;
+          $(task).removeClass("hide")
+        }
+        else {
+          $(task).addClass("hide")
+        }
+      })
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function searchByColumns(self, searchVal) {
       var searchVal = searchVal.toLowerCase()
       var list = self.closest(".list")
-      list.find("div[class='task']").each(function(index, task){
+
+      list.find("div[class='task task-incomplete']").each(function(index, task){
         // find all of the tasks in the list and iterate
         // a task represents a div with a task which I'll be hiding or showing later.
 
@@ -119,7 +184,6 @@
           var found = false;
           var searchWords = []
           // searchWords will eventually have title and description of the task.
-
           $(task).find(".task-info").each(function(index, element) {
             searchWords.push(element.textContent.trim())
           })
@@ -163,11 +227,17 @@
       }
     });
 
-    $('.search_table').keyup(function() {
+    $('.search_table_by_date_keyword_desc_date').keyup(function() {
       var searchLetter = ($(this).val().toLowerCase())
       var self = $(this)
       searchByColumns(self, searchLetter);
     });
+
+    $('.status-dropdown').change(function() {
+      var searchStatus = this.value;
+      var self = $(this)
+      searchByStatus(self, searchStatus)
+    })
 
 
     $(".lists").on("change", ":checkbox", function(box){
