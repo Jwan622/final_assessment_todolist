@@ -17,6 +17,10 @@ gem 'figaro'
 gem "paperclip",            "~> 4.2"
 gem 'aws-sdk', '~> 1.6'
 
+source 'https://rails-assets.org' do
+  gem 'rails-assets-angular'
+end
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
@@ -27,4 +31,5 @@ group :development, :test do
   gem "pry"
   gem "launchy"
   gem 'capybara',               '~> 2.4.4'
+  gem 'teaspoon'
 end

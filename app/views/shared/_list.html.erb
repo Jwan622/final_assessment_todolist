@@ -1,4 +1,5 @@
-<div class="list">
+<div class="list" ng-controller="ListCtrl">
+  <div ng-cloak preload-resource="<%= list.tasks.to_json %>" as="tasks"></div>
 
   <p>
     <span class="lead list-title"><%= list.title %></span>
@@ -11,7 +12,57 @@
   <h5><u>(Check a box to mark a task complete.)</u></h3>
 
     <div class="incomplete-section sortable">
-      <% list.tasks.each do |task| %>
+      <div class="task" ng-repeat="task in tasks">
+        <!-- this is how we do a loop in angular -->
+        <ul>
+          <li>
+            <!-- // about to give value a dyanmic angular attribute by surrounding the expression with {{}}-->
+            <input type="checkbox" class="checkbox-task" value="{{task.id}}">
+
+            <span class="task-info">
+              <label> {{task.title}} </label>
+            </span>
+
+            <br>
+
+            <label> Description </label>
+
+            <span class="task-info">
+              {{task.description}}
+            </span>
+
+            <br>
+
+            <label> Due Date </label>
+
+            <span class="task-info">
+              {{task.due_date}}
+            </span>
+
+            <br>
+
+            <label> Status </label>
+            <span class="task-info-status">
+              {{task.status}}
+            </span>
+            <br>
+
+            <label> Photo </label>
+
+            <br>
+
+            <%= link_to "Update Task", "/tasks/{{task.id}}/edit", class: "btn btn-warning" %>
+          </li>
+        </ul>
+      </div>
+
+      <!-- <p>
+        <a href="#" ng-click="removeAllTasks($event)">Remove All Tasks</a>
+        <a href="#" ng-click="addNewTask($event)">Add New Task</a>
+      </p> -->
+
+
+      <!-- <% list.tasks.each do |task| %>
         <% if task.status == "incomplete" %>
           <div class="task task-incomplete">
             <ul>
@@ -56,7 +107,7 @@
             </ul>
           </div>
         <% end %>
-      <% end %>
+      <% end %> -->
     </div>
 
     <div class="complete-section sortable">
@@ -121,9 +172,12 @@
     </div>
 
     <div class="sorting-section">
-      <%= button_tag "Sort By Title (Ascending)", data: { type: "title", dir: "ascending" }, class: "btn btn-info" %>
-      <%= button_tag "Sort By Due Date (Earliest)", data: { type: "date", dir: "ascending" }, class: "btn btn-info" %>
-      <%= button_tag "Sort By Status (Complete)", data: { type: "status", dir: "ascending" }, class: "btn btn-info" %>
+      <sort-button collection="tasks" by="title" dir="asc">Sort By Title (Ascending)</sort-button>
+      <!-- <sort-button collection="tasks" by="date" dir="asc">Sort By Due Date (Earliest)</sort-button>
+      <sort-button collection="tasks" by="status" dir="asc">Sort By Status (Complete)</sort-button> -->
+      <!-- <%= button_tag "Sort By Title (Ascending)", data: { type: "title", dir: "ascending" }, class: "btn btn-info", "ng-click" => "sortTasks({by: 'title', dir: 'asc'})" %> -->
+      <!-- <%= button_tag "Sort By Due Date (Earliest)", data: { type: "date", dir: "ascending" }, class: "btn btn-info" %> -->
+      <!-- <%= button_tag "Sort By Status (Complete)", data: { type: "status", dir: "ascending" }, class: "btn btn-info" %> -->
     </div>
 
 </div>
